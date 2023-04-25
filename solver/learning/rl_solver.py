@@ -21,7 +21,6 @@ from solver.heuristic.node_rank import *
 from .searcher import *
 from .buffer import RolloutBuffer
 from .utils import apply_mask_to_logit, get_observations_sample, RunningMeanStd
-# from .utils import test_running_time
 
 
 class OnlineAgent(object):
@@ -395,7 +394,7 @@ class RLSolver(Solver):
             candicate_action_dist = Categorical(probs=candicate_action_probs)
         else:
             candicate_action_probs = F.softmax(action_logits / self.softmax_temp, dim=-1)
-            candicate_action_dist = Categorical(probs=candicate_action_probs)
+            candicate_action_dist = Categorical(probs=candicate_action_dist)
 
         if sample:
             action = candicate_action_dist.sample()
