@@ -441,8 +441,8 @@ class Controller:
         # currently, only first_shortest, k_shortest and all_shortest support unsafe routing mode
         # place the prev VNF and curr VNF on the identical physical node
         if v_link in solution['link_paths']:
-            for p_link in solution['link_paths'][v_link]:
-                solution['link_paths_info'].pop((v_link, p_link), None)
+            for p_link in solution['link_paths'][v_link]:   # link_paths[v_link]是一个list，记录了一个v_link映射的所有p_link
+                solution['link_paths_info'].pop((v_link, p_link), None)  # link_path_info[(v_link,p_link)]则是value，记录了虚拟映射的资源消耗
         solution['link_paths'][v_link] = []
 
         check_info = {l_attr.name: 0. for l_attr in v_net.get_link_attrs()}

@@ -1,7 +1,7 @@
 num_nodes: 100
 save_dir: dataset/p_net
 topology:
-  # file_path: './dataset/topology/Geant.gml'
+  # file_path: './dataset/p_net/100-waxman_[0.5-0.2]-cpu_[50-100]-max_cpu_None-bw_[50-100]-max_bw_None-ltc_[0.0-1.0]/p_net.gml'
   type: waxman
   wm_alpha: 0.5
   wm_beta: 0.2

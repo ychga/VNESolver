@@ -87,7 +87,7 @@ class Searcher:
             candicate_action_dist = Categorical(probs=candicate_action_probs)
         else:
             candicate_action_probs = F.softmax(action_logits / self.softmax_temp, dim=-1)
-            candicate_action_dist = Categorical(probs=candicate_action_dist)
+            candicate_action_dist = Categorical(probs=candicate_action_probs)
 
         if sample:
             action = candicate_action_dist.sample()

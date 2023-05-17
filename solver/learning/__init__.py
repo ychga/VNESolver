@@ -1,6 +1,7 @@
 from .hopfield_network import HopfieldNetworkSolver
 from .gae_clustering import GaeClusteringSolver
 from .mcts import MctsSolver
+from .pg_gnn import PgGnnSolver
 from .pg_mlp import PgMlpSolver
 from .pg_cnn import PgCnnSolver
 from .pg_cnn2 import PgCnn2Solver
@@ -18,5 +19,6 @@ __all__ = [
     'PgCnnSolver',
     'PgCnn2Solver',
     'PgSeq2SeqSolver',
-    'A3CGcnSeq2SeqSolver'
+    'A3CGcnSeq2SeqSolver',
+    'PgGnnSolver'
 ]

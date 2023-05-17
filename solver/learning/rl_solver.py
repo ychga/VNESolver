@@ -394,7 +394,7 @@ class RLSolver(Solver):
             candicate_action_dist = Categorical(probs=candicate_action_probs)
         else:
             candicate_action_probs = F.softmax(action_logits / self.softmax_temp, dim=-1)
-            candicate_action_dist = Categorical(probs=candicate_action_dist)
+            candicate_action_dist = Categorical(probs=candicate_action_probs)
 
         if sample:
             action = candicate_action_dist.sample()
@@ -530,6 +530,7 @@ class PGSolver(RLSolver):
         self.lr_scheduler.step() if self.lr_scheduler is not None else None
         self.update_time += 1
         return loss
+
 
 
 class PGWithBaselineSolver(RLSolver):

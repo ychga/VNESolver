@@ -6,7 +6,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch_scatter import scatter
 from torch.autograd import Variable
-from torch_geometric.nn import GCNConv, GATConv, PNAConv, NNConv, SAGEConv, global_add_pool, global_max_pool, global_mean_pool
+from torch_geometric.nn import GCNConv, GATConv, PNAConv, NNConv, SAGEConv, global_add_pool, global_max_pool, \
+    global_mean_pool
 from torch_geometric.data import Data, Batch
 from torch_geometric.utils import to_dense_batch
 
@@ -14,16 +15,16 @@ from .graph_conv import EdgeFusionGATConv
 
 
 class MLPNet(nn.Module):
-    
+
     def __init__(self, input_dim, output_dim, num_layers=2, embedding_dims=None, batch_norm=False, dropout_prob=1.0):
         super(MLPNet, self).__init__()
         self.input_dim = input_dim
         self.output_dim = output_dim
         self.num_layers = num_layers
-        if embedding_dims is not None: 
+        if embedding_dims is not None:
             assert len(embedding_dims) == num_layers - 1, 'len(embedding_dims) should equal to num_layers-1'
         else:
-            embedding_dims = [self.input_dim * 2] * (num_layers-1)
+            embedding_dims = [self.input_dim * 2] * (num_layers - 1)
         sequential = []
         for layer_id in range(self.num_layers):
             if layer_id == 0:
@@ -33,7 +34,7 @@ class MLPNet(nn.Module):
                 lin = nn.Linear(embedding_dims[-1], output_dim)
                 norm = nn.Identity()
             else:
-                lin = nn.Linear(embedding_dims[layer_id-1], embedding_dims[layer_id])
+                lin = nn.Linear(embedding_dims[layer_id - 1], embedding_dims[layer_id])
                 norm = nn.BatchNorm1d(embedding_dims[layer_id]) if batch_norm else nn.Identity()
             sequential += [lin, norm]
             if layer_id != self.num_layers - 1:
@@ -65,12 +66,12 @@ class PositionalEncoder(nn.Module):
         pe = pe.unsqueeze(0)
         self.register_buffer('pe', pe)
         self.method = method
-        
+
     def forward(self, x):
         pe_embeddings = Variable(self.pe[:, :x.size(1)], requires_grad=False)
         pe_embeddings = pe_embeddings.repeat(x.shape[0], 1, 1)
         # if len(x.shape) == 3:
-            # pe_embeddings = pe_embeddings.unsqueeze(0).repeat(x.shape[0], 1, 1)
+        # pe_embeddings = pe_embeddings.unsqueeze(0).repeat(x.shape[0], 1, 1)
         if self.method == 'add':
             x = x + pe_embeddings
         elif self.method == 'concat':
@@ -79,7 +80,7 @@ class PositionalEncoder(nn.Module):
 
 
 class ResNetBlock(nn.Module):
-    
+
     def __init__(self, n_input_channels):
         super(ResNetBlock, self).__init__()
         self.conv_1 = nn.Conv2d(n_input_channels, n_input_channels, kernel_size=[1, 1], stride=[1, 1])
@@ -137,7 +138,9 @@ class ResLinearNet(nn.Module):
 
 class GraphConvNet(nn.Module):
     """Graph Convolutional Network to extract the feature of physical network."""
-    def __init__(self, input_dim, output_dim, num_layers=3, embedding_dim=128, num_heads=1, edge_dim=None, batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
+
+    def __init__(self, input_dim, output_dim, num_layers=3, embedding_dim=128, num_heads=1, edge_dim=None,
+                 batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
         super(GraphConvNet, self).__init__()
         self.num_layers = num_layers
         self.edge_dim = edge_dim
@@ -146,19 +149,21 @@ class GraphConvNet(nn.Module):
         if self.pooling is not None:
             self.graph_pooling = GraphPooling(aggr=pooling, output_dim=output_dim)
 
-
         for layer_id in range(self.num_layers):
             if self.num_layers == 1:
                 conv = self.get_conv(input_dim, output_dim, heads=num_heads, edge_dim=edge_dim, aggr='add', bias=True)
             elif self.num_layers == 1:
                 conv = self.get_conv(input_dim, output_dim, heads=num_heads, edge_dim=edge_dim, aggr='add', bias=True)
             elif layer_id == 0:
-                conv = self.get_conv(input_dim, embedding_dim, heads=num_heads, edge_dim=edge_dim, aggr='add', bias=True)
+                conv = self.get_conv(input_dim, embedding_dim, heads=num_heads, edge_dim=edge_dim, aggr='add',
+                                     bias=True)
             elif layer_id == num_layers - 1:
-                conv = self.get_conv(embedding_dim, output_dim, heads=num_heads, edge_dim=edge_dim, aggr='add', bias=True)
+                conv = self.get_conv(embedding_dim, output_dim, heads=num_heads, edge_dim=edge_dim, aggr='add',
+                                     bias=True)
             else:
-                conv = self.get_conv(embedding_dim, embedding_dim, heads=num_heads, edge_dim=edge_dim, aggr='add', bias=True)
-            
+                conv = self.get_conv(embedding_dim, embedding_dim, heads=num_heads, edge_dim=edge_dim, aggr='add',
+                                     bias=True)
+
             norm_dim = output_dim if layer_id == num_layers - 1 else embedding_dim
             norm = nn.BatchNorm1d(norm_dim) if batch_norm else nn.Identity()
             dout = nn.Dropout(dropout_prob) if dropout_prob < 1. else nn.Identity()
@@ -199,46 +204,61 @@ class GraphConvNet(nn.Module):
 
 
 class GATConvNet(GraphConvNet):
-    
-    def __init__(self, input_dim, output_dim, num_layers=3, embedding_dim=128, num_heads=1, edge_dim=None, batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
-        super(GATConvNet, self).__init__(input_dim, output_dim, num_layers, embedding_dim, num_heads, edge_dim, batch_norm, dropout_prob, return_batch, pooling)
+
+    def __init__(self, input_dim, output_dim, num_layers=3, embedding_dim=128, num_heads=1, edge_dim=None,
+                 batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
+        super(GATConvNet, self).__init__(input_dim, output_dim, num_layers, embedding_dim, num_heads, edge_dim,
+                                         batch_norm, dropout_prob, return_batch, pooling)
 
     def get_conv(self, input_dim, output_dim, edge_dim=None, aggr='add', bias=True, **kwargs):
         num_heads = kwargs.get('num_heads', 1)
         fill_value = kwargs.get('fill_value', 'max')
-        return GATConv(input_dim, output_dim, heads=num_heads, edge_dim=edge_dim, aggr=aggr, bias=bias, fill_value=fill_value)
+        return GATConv(input_dim, output_dim, heads=num_heads, edge_dim=edge_dim, aggr=aggr, bias=bias,
+                       fill_value=fill_value)
+
 
 class EdgeFusionGATConvNet(GraphConvNet):
-    
-    def __init__(self, input_dim, output_dim, num_layers=3, embedding_dim=128, num_heads=1, edge_dim=None, batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
-        super(EdgeFusionGATConvNet, self).__init__(input_dim, output_dim, num_layers, embedding_dim, num_heads, edge_dim, batch_norm, dropout_prob, return_batch, pooling)
+
+    def __init__(self, input_dim, output_dim, num_layers=3, embedding_dim=128, num_heads=1, edge_dim=None,
+                 batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
+        super(EdgeFusionGATConvNet, self).__init__(input_dim, output_dim, num_layers, embedding_dim, num_heads,
+                                                   edge_dim, batch_norm, dropout_prob, return_batch, pooling)
 
     def get_conv(self, input_dim, output_dim, edge_dim=None, aggr='add', bias=True, **kwargs):
         num_heads = kwargs.get('num_heads', 1)
         fill_value = kwargs.get('fill_value', 'max')
-        return EdgeFusionGATConv(input_dim, output_dim, heads=num_heads, edge_dim=edge_dim, aggr=aggr, bias=bias, fill_value=fill_value)
+        return EdgeFusionGATConv(input_dim, output_dim, heads=num_heads, edge_dim=edge_dim, aggr=aggr, bias=bias,
+                                 fill_value=fill_value)
 
 
 class NNConvNet(GraphConvNet):
-    
-    def __init__(self, input_dim, output_dim, num_layers=3, embedding_dim=128, num_heads=1, edge_dim=None, batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
-        super(NNConvNet, self).__init__(input_dim, output_dim, num_layers, embedding_dim, num_heads, edge_dim, batch_norm, dropout_prob, return_batch, pooling)
+
+    def __init__(self, input_dim, output_dim, num_layers=3, embedding_dim=128, num_heads=1, edge_dim=None,
+                 batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
+        super(NNConvNet, self).__init__(input_dim, output_dim, num_layers, embedding_dim, num_heads, edge_dim,
+                                        batch_norm, dropout_prob, return_batch, pooling)
 
     def get_conv(self, input_dim, output_dim, edge_dim=None, aggr='add', bias=True, **kwargs):
         return NNConv(input_dim, output_dim, aggr=aggr, bias=bias)
 
+
 class PNAConvNet(GraphConvNet):
-    
-    def __init__(self, input_dim, output_dim, num_layers=3, embedding_dim=128, num_heads=1, edge_dim=None, batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
-        super(PNAConvNet, self).__init__(PNAConv, input_dim, output_dim, num_layers, embedding_dim, num_heads, edge_dim, batch_norm, dropout_prob, return_batch, pooling)
+
+    def __init__(self, input_dim, output_dim, num_layers=3, embedding_dim=128, num_heads=1, edge_dim=None,
+                 batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
+        super(PNAConvNet, self).__init__(PNAConv, input_dim, output_dim, num_layers, embedding_dim, num_heads, edge_dim,
+                                         batch_norm, dropout_prob, return_batch, pooling)
 
     def get_conv(self, input_dim, output_dim, edge_dim=None, aggr='add', bias=True, **kwargs):
-        return PNAConv(input_dim, output_dim, aggregators=['sum', 'max', 'min'], scalers='identity', edge_dim=edge_dim, bias=bias)
+        return PNAConv(input_dim, output_dim, aggregators=['sum', 'max', 'min'], scalers='identity', edge_dim=edge_dim,
+                       bias=bias)
 
 
 class GCNConvNet(nn.Module):
     """Graph Convolutional Network to extract the feature of physical network."""
-    def __init__(self, input_dim, output_dim, embedding_dim=128, num_layers=3, batch_norm=True, dropout_prob=1.0, return_batch=False, pooling=None, **kwargs):
+
+    def __init__(self, input_dim, output_dim, embedding_dim=128, num_layers=3, batch_norm=True, dropout_prob=1.0,
+                 return_batch=False, pooling=None, **kwargs):
         super(GCNConvNet, self).__init__()
         self.input_dim = input_dim
         self.output_dim = output_dim
@@ -247,7 +267,6 @@ class GCNConvNet(nn.Module):
         self.pooling = pooling
         if self.pooling is not None:
             self.graph_pooling = GraphPooling(aggr=pooling, output_dim=output_dim)
-
 
         for layer_id in range(self.num_layers):
             if self.num_layers == 1:
@@ -258,10 +277,10 @@ class GCNConvNet(nn.Module):
                 conv = GCNConv(embedding_dim, output_dim)
             else:
                 conv = GCNConv(embedding_dim, embedding_dim)
-                
+
             norm_dim = output_dim if layer_id == num_layers - 1 else embedding_dim
-            norm = nn.BatchNorm1d(norm_dim) if batch_norm else nn.Identity()
-            dout = nn.Dropout(dropout_prob) if dropout_prob < 1. else nn.Identity()
+            norm = nn.BatchNorm1d(norm_dim) if batch_norm else nn.Identity()  # 对2d或3d输入进行批标准化
+            dout = nn.Dropout(dropout_prob) if dropout_prob < 1. else nn.Identity()  # 防止过拟合
 
             self.add_module('conv_{}'.format(layer_id), conv)
             self.add_module('norm_{}'.format(layer_id), norm)
@@ -293,7 +312,9 @@ class GCNConvNet(nn.Module):
 
 class DeepEdgeFeatureGAT(nn.Module):
     """five layers"""
-    def __init__(self, input_dim, output_dim, edge_dim, num_layers=5, alpha=0.2, theta=0.2, embedding_dim=128, num_heads=1, batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
+
+    def __init__(self, input_dim, output_dim, edge_dim, num_layers=5, alpha=0.2, theta=0.2, embedding_dim=128,
+                 num_heads=1, batch_norm=False, dropout_prob=1.0, return_batch=False, pooling=None):
         super(DeepEdgeFeatureGAT, self).__init__()
         assert num_layers >= 2
         self.alpha = alpha
@@ -374,6 +395,7 @@ class GraphPooling(nn.Module):
 
 class GraphAttentionPooling(nn.Module):
     """Attention module to extract global feature of a graph."""
+
     def __init__(self, input_dim):
         super(GraphAttentionPooling, self).__init__()
         self.input_dim = input_dim
@@ -423,7 +445,7 @@ class MultiHeadSelfAttention(nn.Module):
             num_heads=1,
     ):
         super(MultiHeadSelfAttention, self).__init__()
-        
+
         self.n_heads = num_heads
 
         if val_dim is None:
@@ -431,7 +453,7 @@ class MultiHeadSelfAttention(nn.Module):
             val_dim = embed_dim // self.n_heads
         if key_dim is None:
             key_dim = val_dim
-        
+
         self.input_dim = input_dim
         self.embed_dim = embed_dim
         self.val_dim = val_dim
@@ -441,7 +463,7 @@ class MultiHeadSelfAttention(nn.Module):
 
         self.W_query = nn.Parameter(torch.Tensor(self.n_heads, input_dim, key_dim))
         self.W_key = nn.Parameter(torch.Tensor(self.n_heads, input_dim, key_dim))
-        
+
         self.init_parameters()
 
     def init_parameters(self):
@@ -478,12 +500,13 @@ class MultiHeadSelfAttention(nn.Module):
         # Calculate queries
         Q = torch.matmul(qflat, self.W_query).view(shape_q)  # (n_heads, num_query, graph_size, key/val_size)
         # Calculate keys and values
-        K = torch.matmul(hflat, self.W_key).view(shape_k)    # (n_heads, batch_size, graph_size, key/val_size)
-        #V = torch.matmul(hflat, self.W_val).view(shp)
+        K = torch.matmul(hflat, self.W_key).view(shape_k)  # (n_heads, batch_size, graph_size, key/val_size)
+        # V = torch.matmul(hflat, self.W_val).view(shp)
 
         # Calculate compatibility 
-        compatibility_raw = self.norm_factor * torch.matmul(Q, K.transpose(2, 3))  # (n_heads, batch_size, num_query, problem_size)
-        compatibility = torch.tanh(compatibility_raw.mean(dim=0)) * 10.            # (batch_size, num_query, problem_size)
+        compatibility_raw = self.norm_factor * torch.matmul(Q, K.transpose(2,
+                                                                           3))  # (n_heads, batch_size, num_query, problem_size)
+        compatibility = torch.tanh(compatibility_raw.mean(dim=0)) * 10.  # (batch_size, num_query, problem_size)
         return compatibility
 
 
@@ -511,6 +534,7 @@ class NeuralTensorNetwork(torch.nn.Module):
     """
     Tensor Network module to calculate similarity vector.
     """
+
     def __init__(self, input_features, tensor_neurons):
         """
         :param args: Arguments object.
@@ -525,8 +549,9 @@ class NeuralTensorNetwork(torch.nn.Module):
         """
         Defining weights.
         """
-        self.weight_matrix = torch.nn.Parameter(torch.Tensor(self.input_features, self.input_features, self.tensor_neurons))
-        self.weight_matrix_block = torch.nn.Parameter(torch.Tensor(self.tensor_neurons, 2*self.input_features))
+        self.weight_matrix = torch.nn.Parameter(
+            torch.Tensor(self.input_features, self.input_features, self.tensor_neurons))
+        self.weight_matrix_block = torch.nn.Parameter(torch.Tensor(self.tensor_neurons, 2 * self.input_features))
         self.bias = torch.nn.Parameter(torch.Tensor(self.tensor_neurons, 1))
 
     def init_parameters(self):
@@ -562,14 +587,15 @@ class Sinkhorn(nn.Module):
     Input: input matrix s
     Output: bi-stochastic matrix s
     """
+
     def __init__(self, max_iter=10, tau=1., epsilon=1e-4, log_forward=True, batched_operation=False):
         super(Sinkhorn, self).__init__()
         self.max_iter = max_iter
         self.tau = tau
         self.epsilon = epsilon
         self.log_forward = log_forward
-        self.batched_operation = batched_operation # batched operation may cause instability in backward computation,
-                                                   # but will boost computation.
+        self.batched_operation = batched_operation  # batched operation may cause instability in backward computation,
+        # but will boost computation.
 
     def forward(self, *input, dummy=False, **kwinput):
         if dummy:
@@ -610,7 +636,7 @@ class Sinkhorn(nn.Module):
         log_s = s / self.tau
 
         for b in range(batch_size):
-            log_s[b, nrows[b]-1, ncols[b]-1] = -float('inf')
+            log_s[b, nrows[b] - 1, ncols[b] - 1] = -float('inf')
 
         if dummy_row:
             assert s.shape[2] >= s.shape[1]
@@ -632,13 +658,13 @@ class Sinkhorn(nn.Module):
                 if i % 2 == 0:
                     log_sum = torch.logsumexp(log_s, 2, keepdim=True)
                     for b in range(batch_size):
-                        log_sum[b, nrows[b]-1:, :] = 0
+                        log_sum[b, nrows[b] - 1:, :] = 0
                     log_s = log_s - log_sum + log_r.unsqueeze(2)
                     log_s[torch.isnan(log_s)] = -float('inf')
                 else:
                     log_sum = torch.logsumexp(log_s, 1, keepdim=True)
                     for b in range(batch_size):
-                        log_sum[b, :, ncols[b]-1:] = 0
+                        log_sum[b, :, ncols[b] - 1:] = 0
                     log_s = log_s - log_sum + log_c.unsqueeze(1)
                     log_s[torch.isnan(log_s)] = -float('inf')
 
@@ -652,7 +678,8 @@ class Sinkhorn(nn.Module):
 
             return torch.exp(log_s)
         else:
-            ret_log_s = torch.full((batch_size, log_s.shape[1], log_s.shape[2]), -float('inf'), device=s.device, dtype=s.dtype)
+            ret_log_s = torch.full((batch_size, log_s.shape[1], log_s.shape[2]), -float('inf'), device=s.device,
+                                   dtype=s.dtype)
 
             for b in range(batch_size):
                 row_slice = slice(0, nrows[b])
@@ -760,7 +787,8 @@ class Sinkhorn(nn.Module):
 
             return torch.exp(log_s)
         else:
-            ret_log_s = torch.full((batch_size, log_s.shape[1], log_s.shape[2]), -float('inf'), device=s.device, dtype=s.dtype)
+            ret_log_s = torch.full((batch_size, log_s.shape[1], log_s.shape[2]), -float('inf'), device=s.device,
+                                   dtype=s.dtype)
 
             for b in range(batch_size):
                 row_slice = slice(0, nrows[b])
@@ -799,12 +827,11 @@ class MultiplerNet(nn.Module):
         self.l2 = nn.Linear(256, 256)
         self.l3 = nn.Linear(256, 1)
 
-        
     def forward(self, state):
         a = F.leaky_relu(self.l1(state))
         a = F.leaky_relu(self.l2(a))
-        #return F.relu(self.l3(a))
-        return F.softplus(self.l3(a)) # lagrangian multipliers can not be negative
+        # return F.relu(self.l3(a))
+        return F.softplus(self.l3(a))  # lagrangian multipliers can not be negative
 
 
 if __name__ == '__main__':
@@ -814,10 +841,12 @@ if __name__ == '__main__':
         out = mlp(input)
         print(out)
 
+
     def test_gcn_net():
         import networkx as nx
 
         a = nx.waxman_graph(n=100)
         print(dict(a.nodes(data=True)).values())
-        
+
+
     test_gcn_net()

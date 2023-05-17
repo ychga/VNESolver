@@ -99,9 +99,9 @@ class Counter(object):
             solution['v_net_r2c_ratio'] = 0
             # solution['node_slots'] = {}
             # solution['link_paths'] = {}
-        solution['v_net_time_revenue'] = solution['v_net_revenue'] * v_net.lifetime
-        solution['v_net_time_cost'] = solution['v_net_cost'] * v_net.lifetime
-        solution['v_net_time_rc_ratio'] = solution['v_net_r2c_ratio'] * v_net.lifetime
+        solution['v_net_time_revenue'] = solution['v_net_revenue'] / v_net.lifetime if v_net.lifetime != 0 else 0
+        solution['v_net_time_cost'] = solution['v_net_cost'] / v_net.lifetime if v_net.lifetime != 0 else 0
+        solution['v_net_time_rc_ratio'] = solution['v_net_r2c_ratio'] / v_net.lifetime if v_net.lifetime != 0 else 0
         return solution.to_dict()
 
     def calculate_sum_network_resource(self, network: Network, node: bool = True, link: bool = True):

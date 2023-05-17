@@ -89,7 +89,7 @@ lower_hidden = torch.zeros(1, hidden_dim)
 for i in range(num_v_node):
     index = torch.LongTensor([i]).unsqueeze(0).unsqueeze(-1)
     v_node_embeding = v_node_embedings.gather(1, index.expand(v_node_embedings.size()[0], -1, v_node_embedings.size()[-1])).squeeze(1)
-    lower_out, lower_hidden = lower_net.decoder(lower_init_obs_tensor['p_net_data'], v_node_embeding, lower_hidden, lower_init_obs_tensor['v_net_attrs'])
+    lower_out, lower_hidden = lower_net.net(lower_init_obs_tensor['p_net_data'], v_node_embeding, lower_hidden, lower_init_obs_tensor['v_net_attrs'])
     
     lower_obs = {
         'p_net_data': p_net_data, 

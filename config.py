@@ -8,8 +8,8 @@ import networkx as nx
 
 from utils import read_setting, write_setting
 
-
 parser = argparse.ArgumentParser(description='configuration file')
+
 
 def str2bool(v):
     if isinstance(v, bool):
@@ -23,17 +23,24 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
+
 ### Dataset ###
 data_arg = parser.add_argument_group('data')
 
 setting_arg = parser.add_argument_group('settings')
-setting_arg.add_argument('--p_net_setting_path', type=str, default='settings/p_net_setting.yaml', help='File path of physical network settings')
-setting_arg.add_argument('--v_sim_setting_path', type=str, default='settings/v_sim_setting.yaml', help='File path of virtual network settings')
-setting_arg.add_argument('--nn_setting_path', type=str, default='settings/neural_network.yaml', help='File path of neural network settings')
-setting_arg.add_argument('--rl_setting_path', type=str, default='settings/reinforcement_learning.yaml', help='File path of advanced reinforcement learning settings')
-setting_arg.add_argument('--run_setting_path', type=str, default='settings/running_and_training.yaml', help='File path of advanced running and training settings')
+setting_arg.add_argument('--p_net_setting_path', type=str, default='settings/p_net_setting.yaml',
+                         help='File path of physical network settings')
+setting_arg.add_argument('--v_sim_setting_path', type=str, default='settings/v_sim_setting.yaml',
+                         help='File path of virtual network settings')
+setting_arg.add_argument('--nn_setting_path', type=str, default='settings/neural_network.yaml',
+                         help='File path of neural network settings')
+setting_arg.add_argument('--rl_setting_path', type=str, default='settings/reinforcement_learning.yaml',
+                         help='File path of advanced reinforcement learning settings')
+setting_arg.add_argument('--run_setting_path', type=str, default='settings/running_and_training.yaml',
+                         help='File path of advanced running and training settings')
 
-setting_arg.add_argument('--if_adjust_v_sim_setting', type=str2bool, default=False, help='Whether to deirectly adjust VN settings in parser')
+setting_arg.add_argument('--if_adjust_v_sim_setting', type=str2bool, default=False,
+                         help='Whether to deirectly adjust VN settings in parser')
 setting_arg.add_argument('--v_sim_setting_max_length', type=int, default=10, help='')
 setting_arg.add_argument('--v_sim_setting_aver_arrival_rate', type=float, default=0.10, help='')
 setting_arg.add_argument('--v_sim_setting_aver_lifetime', type=int, default=1000, help='')
@@ -47,21 +54,26 @@ env_arg.add_argument('--summary_dir', type=str, default='save/', help='File Dire
 env_arg.add_argument('--summary_file_name', type=str, default='global_summary.csv', help='Summary file name')
 env_arg.add_argument('--if_save_records', type=str2bool, default=True, help='Whether to save records')
 env_arg.add_argument('--if_temp_save_records', type=str2bool, default=True, help='Whether to temporarily save records')
-env_arg.add_argument('--node_resource_unit_price', type=float, default=1., help='') 
-env_arg.add_argument('--link_resource_unit_price', type=float, default=1., help='') 
-env_arg.add_argument('--time_window_size', type=int, default=100., help='The time window for batch VNE, only working for BatchScenario') 
+env_arg.add_argument('--node_resource_unit_price', type=float, default=1., help='')
+env_arg.add_argument('--link_resource_unit_price', type=float, default=1., help='')
+env_arg.add_argument('--time_window_size', type=int, default=100.,
+                     help='The time window for batch VNE, only working for BatchScenario')
 
 ### solver  ###
 solver_arg = parser.add_argument_group('solver')
 solver_arg.add_argument('--solver_name', type=str, default='pg_cnn2', help='Name of the  selected to run')
 solver_arg.add_argument('--verbose', type=str2bool, default=1, help='Level of showing information')
-solver_arg.add_argument('--reusable', type=str2bool, default=False, help='Whether or not to allow to deploy several VN nodes on the same VNF')
+solver_arg.add_argument('--reusable', type=str2bool, default=False,
+                        help='Whether or not to allow to deploy several VN nodes on the same VNF')
 
-solver_arg.add_argument('--matching_mathod', type=str, default="greedy", help='Node placing approches for node mapping: [greedy, l2s2 (Large2LargeSmall2Small)]') 
-solver_arg.add_argument('--shortest_method', type=str, default="bfs_shortest", help='Path finding approches for link mapping: [mcf (Multi-commodity Flow), first_shortest, k_shortest, all_shortest, bfs_shortest, available_shortest]') 
-solver_arg.add_argument('--node_ranking_method', type=str, default="order", help='Pre-rank nodes: [order, ffd, grc, nrm, rw]') 
-solver_arg.add_argument('--link_ranking_method', type=str, default="order", help='Pre-rank links: [order, ffd]') 
-solver_arg.add_argument('--k_shortest', type=int, default=10, help="k param for k_shortest") 
+solver_arg.add_argument('--matching_mathod', type=str, default="greedy",
+                        help='Node placing approches for node mapping: [greedy, l2s2 (Large2LargeSmall2Small)]')
+solver_arg.add_argument('--shortest_method', type=str, default="bfs_shortest",
+                        help='Path finding approches for link mapping: [mcf (Multi-commodity Flow), first_shortest, k_shortest, all_shortest, bfs_shortest, available_shortest]')
+solver_arg.add_argument('--node_ranking_method', type=str, default="order",
+                        help='Pre-rank nodes: [order, ffd, grc, nrm, rw]')
+solver_arg.add_argument('--link_ranking_method', type=str, default="order", help='Pre-rank links: [order, ffd]')
+solver_arg.add_argument('--k_shortest', type=int, default=10, help="k param for k_shortest")
 solver_arg.add_argument('--allow_revocable', type=str2bool, default=False, help='')
 solver_arg.add_argument('--allow_rejection', type=str2bool, default=False, help='')
 
@@ -77,20 +89,24 @@ rl_arg.add_argument('--explore_rate', type=float, default=0.90, help='Epsilon-gr
 rl_arg.add_argument('--lr', type=float, default=1e-3, help='General Learning rate')
 rl_arg.add_argument('--lr_actor', type=float, default=1e-3, help='Actor learning rate')
 rl_arg.add_argument('--lr_critic', type=float, default=1e-3, help='Critic learning rate')
-rl_arg.add_argument('--k_searching', type=int, default=3, help='Beam search width or Sample workers number') 
-rl_arg.add_argument('--decode_strategy', type=str, default='greedy', help='Solution Decoding Strategy: [greedy (Greedy search) | sample (Sample search)/ beam (Beam search)]') 
+rl_arg.add_argument('--k_searching', type=int, default=3, help='Beam search width or Sample workers number')
+rl_arg.add_argument('--decode_strategy', type=str, default='greedy',
+                    help='Solution Decoding Strategy: [greedy (Greedy search) | sample (Sample search)/ beam (Beam search)]')
 
 ### Training ###
 train_arg = parser.add_argument_group('train')
-train_arg.add_argument('--use_cuda', type=str2bool, default=True, help='Whether to sse GPU to accelerate the training process')
+train_arg.add_argument('--use_cuda', type=str2bool, default=True,
+                       help='Whether to sse GPU to accelerate the training process')
 train_arg.add_argument('--cuda_id', type=int, default=0, help='CUDA device id')
 train_arg.add_argument('--allow_parallel', type=str2bool, default=False, help='Whether to use mutiple GPUs')
 train_arg.add_argument('--batch_size', type=int, default=256, help='Batch size of training')
-train_arg.add_argument('--num_train_epochs', type=int, default=100, help='Number of training epochs')
-train_arg.add_argument('--num_workers', type=int, default=10, help='Number of sub workers who collect experience asynchronously')
+train_arg.add_argument('--num_train_epochs', type=int, default=11, help='Number of training epochs')
+train_arg.add_argument('--num_workers', type=int, default=10,
+                       help='Number of sub workers who collect experience asynchronously')
 train_arg.add_argument('--target_steps', type=int, default=-1, help='Target steps for collecting experience')
 train_arg.add_argument('--repeat_times', type=int, default=10, help='')
-train_arg.add_argument('--use_negative_sample', type=str2bool, default=True, help='Whether to allow use failed sample to train')
+train_arg.add_argument('--use_negative_sample', type=str2bool, default=True,
+                       help='Whether to allow use failed sample to train')
 train_arg.add_argument('--pretrained_model_path', type=str, default='', help='Path of pretrained model')
 
 ### Run ###
@@ -112,8 +128,8 @@ run_arg.add_argument('--if_save_config', type=str2bool, default=True, help='Whet
 # run_arg.add_argument('--reward_weight', type=float, default=0.1, help='')
 # run_arg.add_argument('--save_model', type=str2bool, default=False, help='Save model')
 # run_arg.add_argument('--load_model', type=str2bool, default=False, help='Load model')
-#run_arg.add_argument('--lr_decay_step', type=int, default=5000, help='Lr1 decay step')
-#run_arg.add_argument('--lr_decay_rate', type=float, default=0.96, help='Lr1 decay rate')
+# run_arg.add_argument('--lr_decay_step', type=int, default=5000, help='Lr1 decay step')
+# run_arg.add_argument('--lr_decay_rate', type=float, default=0.96, help='Lr1 decay rate')
 
 ### Misc ###
 misc_arg = parser.add_argument_group('misc')
@@ -137,10 +153,11 @@ def get_config(args=None, adjust_p_net_setting={}, adjust_v_sim_setting={}):
     for dir in [config.save_dir, config.summary_dir, 'dataset', 'dataset/p_net', 'dataset/v_nets']:
         if not os.path.exists(dir):
             os.makedirs(dir)
-            
+
     # read p_net and v_nets setting
     config.p_net_setting = read_setting(config.p_net_setting_path)
-    if 'file_path' in config.p_net_setting['topology'] and os.path.exists(config.p_net_setting['topology']['file_path']):
+    if 'file_path' in config.p_net_setting['topology'] and os.path.exists(
+            config.p_net_setting['topology']['file_path']):
         G = nx.read_gml(config.p_net_setting['topology']['file_path'], label='id')
         config.p_net_setting['num_nodes'] = G.number_of_nodes()
     config.v_sim_setting = read_setting(config.v_sim_setting_path)
@@ -180,13 +197,16 @@ def get_config(args=None, adjust_p_net_setting={}, adjust_v_sim_setting={}):
     check_config(config)
     return config
 
+
 def check_config(config):
     # check config
     assert config.reusable == False, 'Unsupported currently!'
     if config.target_steps != -1: assert config.target_steps % config.batch_size == 0, 'A should be greater than b!'
 
+
 def show_config(config):
     pprint.pprint(vars(config))
+
 
 def save_config(config, fname='config.yaml'):
     save_dir = os.path.join(config.save_dir, config.solver_name, config.run_id)
@@ -194,6 +214,7 @@ def save_config(config, fname='config.yaml'):
     config_path = os.path.join(save_dir, fname)
     write_setting(vars(config), config_path)
     print(f'Save config in {config_path}')
+
 
 def load_config(fpath=None):
     try:
@@ -203,6 +224,7 @@ def load_config(fpath=None):
         config = get_config()
         print(f'Load default config')
     return config
+
 
 def delete_empty_dir(config):
     for dir in [config.record_dir, config.log_dir, config.save_dir]:
