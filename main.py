@@ -33,8 +33,8 @@ if __name__ == '__main__':
     config.solver_name = 'pg_gnn'  # modify the algorithm of the solver
     # config.shortest_method = 'mcf'  # modify the shortest path algorithm to Multi-commodity Flow
     # config.num_train_epochs = 100   # modify the number of trainning epochs
-    config.pretrained_model_path = 'save/pg_gnn/LAPTOP-DBFM4OU7-20230512T203832/model/model-9.pkl'
-    config.num_train_epochs = 0
+    # config.pretrained_model_path = 'save/pg_gnn/LAPTOP-DBFM4OU7-20230512T203832/model/model-9.pkl'
+    config.num_train_epochs = 15
     # 2. Generate Dataset
     # Although we do not generate a static dataset,
     # the environment will automatically produce a random dataset.

@@ -591,6 +591,11 @@ class A2CSolver(RLSolver):
         actor_loss = - (action_logprobs * advantages).mean()
         critic_loss = F.mse_loss(returns, values)
         entropy_loss = dist_entropy.mean()
+        '''
+        加和损失值后一起更新的好处是可以减少训练的时间和内存消耗，因为只需要进行一次反向传播和参数更新。
+        而如果单独更新的话，就需要进行三次反向传播和参数更新，这样会增加计算量和内存消耗。
+        另外，加和损失值后一起更新也可以使得不同的损失之间有一定的协调作用，避免某个损失过大或过小导致的不平衡问题。
+        '''
         loss = actor_loss + self.coef_critic_loss * critic_loss + self.coef_entropy_loss * entropy_loss
 
         self.optimizer.zero_grad()
