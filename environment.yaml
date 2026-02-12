@@ -1,0 +1,16 @@
+name: virne
+channels:
+
+* pytorch
+* pyg
+* defaults
+  dependencies:
+* python=3.9
+* pytorch=1.12.1
+* cudatoolkit=11.3
+* scikit-learn
+* gym
+* pyg
+* fastapi
+* uvicorn
+* pip
