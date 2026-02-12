@@ -15,3 +15,5 @@ conda activate virne
 
 使用conda创建版本号严格一致的环境：
 conda env create -f environment-lock.yml
+
+** 可以参考vnesolver分析.md中对函数调用栈的梳理！！！能够快速理解项目的流程 **
