@@ -327,7 +327,7 @@ class Environment:
             if self.if_save_records:
                 print(f'save records to {record_path}')
                 print(f'save summary to {summary_path}')
-        return info
+        return info, record_path, summary_path
 
 
 class SolutionStepEnvironment(Environment):

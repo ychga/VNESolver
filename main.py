@@ -1,4 +1,8 @@
+import json
 import os
+
+import numpy as np
+
 from config import get_config, show_config, save_config, load_config
 from data import Generator
 from base import BasicScenario
@@ -8,15 +12,15 @@ from solver import REGISTRY
 def run(config):
     print(f"\n{'-' * 20}    Start     {'-' * 20}\n")
     # Load solver info: environment and solver class
-    print(REGISTRY)
     solver_info = REGISTRY.get(config.solver_name)
     Env, Solver = solver_info['env'], solver_info['solver']
     print(f'Use {config.solver_name} Solver (Type = {solver_info["type"]})...\n')
 
     scenario = BasicScenario.from_config(Env, Solver, config)
     scenario.run()
-
     print(f"\n{'-' * 20}   Complete   {'-' * 20}\n")
+
+
 
 
 if __name__ == '__main__':
@@ -28,21 +32,24 @@ if __name__ == '__main__':
     config = get_config()
 
     # You can modify some settings directly here.
-    # An example:
-    # pg_cnn、grc_rank、ffd_rank、mip_vne（缓慢）、random_rank、pg_gnn
     config.solver_name = 'pg_gnn'  # modify the algorithm of the solver
+    config.pretrained_model_path = 'save\pg_gnn\gnn_cpu_bw_default\model/model-89.pkl'
+    config.num_train_epochs = 0
+    config.verbose = 1  # debug
+    config.p_net_setting[
+        'path'] = './dataset/p_net/p_net-cpu_[50-100]-max_cpu_None-bw_[50-100]-max_bw_None-ltc_[0.0-1.0]'
+    config.v_sim_setting['path'] = './dataset/v_nets/1-[2-5]-random-1000-0.04-cpu_[0-50]-bw_[0-50]'
     # config.shortest_method = 'mcf'  # modify the shortest path algorithm to Multi-commodity Flow
     # config.num_train_epochs = 100   # modify the number of trainning epochs
-    # config.pretrained_model_path = 'save/pg_gnn/LAPTOP-DBFM4OU7-20230512T203832/model/model-9.pkl'
-    config.num_train_epochs = 15
+
     # 2. Generate Dataset
     # Although we do not generate a static dataset,
     # the environment will automatically produce a random dataset.
-    p_net, v_net_simulator = Generator.generate_dataset(
-        config,
-        p_net=False,
-        v_nets=False,
-        save=False)  # Here, no dataset will be generated and saved.
+    # p_net, v_net_simulator = Generator.generate_dataset(
+    #     config,
+    #     p_net=False,
+    #     v_nets=False,
+    #     save=False)  # Here, no dataset will be generated and saved.
 
     # 3. Start to Run
     # A scenario with an environment and a solver will be create following provided config.

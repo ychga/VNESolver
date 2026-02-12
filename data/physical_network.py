@@ -178,7 +178,8 @@ class PhysicalNetwork(Network):
         if not os.path.exists(dataset_dir):
             raise ValueError(f'Find no dataset in {dataset_dir}.\nPlease firstly generating it.')
         file_path = os.path.join(dataset_dir, 'p_net.gml')
-        p_net = PhysicalNetwork.from_gml(file_path)
+        # p_net = PhysicalNetwork.from_gml(file_path)
+        p_net = PhysicalNetwork.from_gml_2(file_path)
         # get benchmark for normalization
         p_net.degree_benchmark = p_net.get_degree_benchmark()
         p_net.node_attr_benchmarks = p_net.get_node_attr_benchmarks()

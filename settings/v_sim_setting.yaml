@@ -1,4 +1,5 @@
-num_v_nets: 100
+num_v_nets: 1
+# path: '.\dataset\v_nets\1-[2-5]-random-1000-0.04-cpu_[0-50]-bw_[0-50]'
 topology:
   random_prob: 0.5
   type: random
@@ -6,7 +7,7 @@ v_net_size:
   distribution: uniform
   dtype: int
   low: 2
-  high: 10
+  high: 5
 arrival_rate:
   distribution: possion
   dtype: float

@@ -14,7 +14,7 @@ from .solution import Solution
 from config import show_config, save_config
 from data.physical_network import PhysicalNetwork
 from data.virtual_network_request_simulator import VirtualNetworkRequestSimulator
-from utils import get_p_net_dataset_dir_from_setting
+from utils import get_p_net_dataset_dir_from_setting, get_v_nets_dataset_dir_from_setting
 
 
 class Scenario:
@@ -28,25 +28,35 @@ class Scenario:
     @classmethod
     def from_config(cls, Env, Solver, config):
         # Create basic class: controller, recorder, counter, recorder
-        counter = Counter(config.v_sim_setting['node_attrs_setting'], 
-                          config.v_sim_setting['link_attrs_setting'], 
+        counter = Counter(config.v_sim_setting['node_attrs_setting'],
+                          config.v_sim_setting['link_attrs_setting'],
                           **vars(config))
-        controller = Controller(config.v_sim_setting['node_attrs_setting'], 
-                                config.v_sim_setting['link_attrs_setting'], 
+        controller = Controller(config.v_sim_setting['node_attrs_setting'],
+                                config.v_sim_setting['link_attrs_setting'],
                                 **vars(config))
         recorder = Recorder(counter, **vars(config))
 
         # Create p_net and v_net simulator
-        config.p_net_dataset_dir = get_p_net_dataset_dir_from_setting(config.p_net_setting)
-        print(config.p_net_dataset_dir)
-        if os.path.exists(config.p_net_dataset_dir):
-            p_net = PhysicalNetwork.load_dataset(config.p_net_dataset_dir)
-            print(f'Load Physical Network from {config.p_net_dataset_dir}') if config.verbose >= 1 else None
+        if 'path' in config.p_net_setting and os.path.exists(config.p_net_setting['path']):
+            p_net = PhysicalNetwork.load_dataset(config.p_net_setting['path'])
+        # config.p_net_dataset_dir = get_p_net_dataset_dir_from_setting(config.p_net_setting)
+        # print(config.p_net_dataset_dir)
+        # if os.path.exists(config.p_net_dataset_dir):
+        #     p_net = PhysicalNetwork.load_dataset(config.p_net_dataset_dir)
+        #     print(f'Load Physical Network from {config.p_net_dataset_dir}') if config.verbose >= 1 else None
         else:
             p_net = PhysicalNetwork.from_setting(config.p_net_setting)
             print(f'*** Generate Physical Network from setting')
-        v_net_simulator = VirtualNetworkRequestSimulator.from_setting(config.v_sim_setting)
-        print(f'Create VNR Simulator from setting') if config.verbose >= 1 else None
+        if 'path' in config.v_sim_setting and os.path.exists(config.v_sim_setting['path']):
+            v_net_simulator = VirtualNetworkRequestSimulator.load_dataset(config.v_sim_setting['path'])
+        # config.v_net_dataset_dir = get_v_nets_dataset_dir_from_setting(config.v_sim_setting)
+        # print(config.v_net_dataset_dir)
+        # if os.path.exists(config.v_net_dataset_dir):
+        #     v_net_simulator = VirtualNetworkRequestSimulator.load_dataset(config.v_net_dataset_dir)
+        #     print(f'Load Virtual Network from {config.v_net_dataset_dir}') if config.verbose >= 1 else None
+        else:
+            v_net_simulator = VirtualNetworkRequestSimulator.from_setting(config.v_sim_setting)
+            print(f'Create VNR Simulator from setting') if config.verbose >= 1 else None
 
         # create env and solver
         env = Env(p_net, v_net_simulator, controller, recorder, counter, **vars(config))
@@ -78,6 +88,7 @@ class Scenario:
         if hasattr(self.solver, 'eval'):
             self.solver.eval()
 
+
 class BasicScenario(Scenario):
 
     def __init__(self, env, solver, config):
@@ -85,34 +96,36 @@ class BasicScenario(Scenario):
 
     def run(self):
         self.ready()
-
+        summary_info, record_path, summary_path = None, None, None
         for epoch_id in range(self.config.start_epoch, self.config.start_epoch + self.config.num_epochs):
             print(f'\nEpoch {epoch_id}') if self.verbose >= 2 else None
             instance = self.env.reset()
 
-            pbar = tqdm.tqdm(desc=f'Running with {self.config.solver_name} in epoch {epoch_id}', total=self.env.num_v_nets) if self.verbose <= 1 else None
+            # pbar = tqdm.tqdm(desc=f'Running with {self.config.solver_name} in epoch {epoch_id}',
+            #                  total=self.env.num_v_nets) if self.verbose <= 1 else None
 
             while True:
                 solution = self.solver.solve(instance)
-
                 next_instance, _, done, info = self.env.step(solution)
 
-                if pbar is not None: 
-                    pbar.update(1)
-                    pbar.set_postfix({
-                        'ac': f'{info["success_count"] / info["v_net_count"]:1.2f}',
-                        'r2c': f'{info["total_r2c"]:1.2f}',
-                        'inservice': f'{info["inservice_count"]:05d}',
-                    })
+                # if pbar is not None:
+                #     pbar.update(1)
+                #     pbar.set_postfix({
+                #         'ac': f'{info["success_count"] / info["v_net_count"]:1.2f}',
+                #         'r2c': f'{info["total_r2c"]:1.2f}',
+                #         'inservice': f'{info["inservice_count"]:05d}',
+                #     })
 
                 if done:
+                    instance['p_net'].save_dataset('./dataset/p_net/aftersolution') # 只有两个event，一个是创建虚拟网络，一个是删除虚拟网络，所以此时instance包含创建虚拟网络后的物理网络情况
                     break
                 instance = next_instance
-  
-            if pbar is not None: pbar.close()
-            summary_info = self.env.summary_records()
+
+            # if pbar is not None: pbar.close()
+            summary_info, record_path, summary_path = self.env.summary_records()
             if self.verbose == 0:
                 pprint.pprint(summary_info)
+        return summary_info, record_path, summary_path
 
 
 class TimeWindowScenario(Scenario):
@@ -130,7 +143,8 @@ class TimeWindowScenario(Scenario):
         next_time_window = self.current_time_window + self.time_window_size
         enter_event_list = []
         leave_event_list = []
-        while self.next_event_id < len(self.v_net_simulator.events) and self.v_net_simulator.events[self.next_event_id]['time'] <= next_time_window:
+        while self.next_event_id < len(self.v_net_simulator.events) and self.v_net_simulator.events[self.next_event_id][
+            'time'] <= next_time_window:
             if self.v_net_simulator.events[self.next_event_id]['type'] == 1:
                 enter_event_list.append(self.v_net_simulator.events[self.next_event_id])
             else:
@@ -143,15 +157,17 @@ class TimeWindowScenario(Scenario):
 
     def run(self):
         self.ready()
-        
+
         for epoch_id in range(self.config.start_epoch, self.config.start_epoch + self.config.num_epochs):
             print(f'\nEpoch {epoch_id}') if self.verbose >= 2 else None
-            pbar = tqdm.tqdm(desc=f'Running with {self.solver.name} in epoch {epoch_id}', total=self.env.num_v_nets) if self.verbose <= 1 else None
+            pbar = tqdm.tqdm(desc=f'Running with {self.solver.name} in epoch {epoch_id}',
+                             total=self.env.num_v_nets) if self.verbose <= 1 else None
             instance = self.env.reset()
 
             current_event_id = 0
             events_list = self.env.v_net_simulator.events
-            for current_time in range(0, int(events_list[-1]['time'] + self.time_window_size + 1), self.time_window_size):
+            for current_time in range(0, int(events_list[-1]['time'] + self.time_window_size + 1),
+                                      self.time_window_size):
                 enter_event_list = []
                 while events_list[current_event_id]['time'] < current_time:
                     # enter
@@ -167,11 +183,11 @@ class TimeWindowScenario(Scenario):
                         record = self.count_and_add_record()
                     current_event_id += 1
 
-                for enter_event in  enter_event_list:
+                for enter_event in enter_event_list:
                     solution = self.solver.solve(instance)
                     next_instance, _, done, info = self.env.step(solution)
 
-                    if pbar is not None: 
+                    if pbar is not None:
                         pbar.update(1)
                         pbar.set_postfix({
                             'ac': f'{info["success_count"] / info["v_net_count"]:1.2f}',
@@ -182,9 +198,8 @@ class TimeWindowScenario(Scenario):
                     if done:
                         break
                     instance = next_instance
-  
+
             if pbar is not None: pbar.close()
             summary_info = self.env.summary_records()
             if self.verbose == 0:
                 pprint.pprint(summary_info)
-

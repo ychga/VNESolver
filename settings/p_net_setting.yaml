@@ -1,7 +1,8 @@
-num_nodes: 100
+num_nodes: 11
 save_dir: dataset/p_net
+path: './dataset/p_net/p_net-cpu_[50-100]-max_cpu_None-bw_[50-100]-max_bw_None-ltc_[0.0-1.0]'
 topology:
-  # file_path: './dataset/p_net/100-waxman_[0.5-0.2]-cpu_[50-100]-max_cpu_None-bw_[50-100]-max_bw_None-ltc_[0.0-1.0]/p_net.gml'
+  # file_path: './dataset/p_net/p_net-cpu_[50-100]-max_cpu_None-bw_[50-100]-max_bw_None-ltc_[0.0-1.0]/p_net.gml'
   type: waxman
   wm_alpha: 0.4
   wm_beta: 0.2

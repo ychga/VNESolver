@@ -44,7 +44,9 @@ class Network(nx.Graph):
         check_attrs_existence: Check if all defined attributes exist in the graph.
         write_setting: Write network setting to file.
     """
-    def __init__(self, incoming_graph_data: Optional[nx.Graph] =None, node_attrs_setting: list = [], link_attrs_setting: list = [], **kwargs):
+
+    def __init__(self, incoming_graph_data: Optional[nx.Graph] = None, node_attrs_setting: list = [],
+                 link_attrs_setting: list = [], **kwargs):
         """
         Initializes a new Network instance.
 
@@ -65,8 +67,10 @@ class Network(nx.Graph):
 
     def create_attrs_from_setting(self):
         """Create node and link attribute dictionaries from their respective settings."""
-        self.node_attrs = {n_attr_dict['name']: Attribute.from_dict(n_attr_dict) for n_attr_dict in self.graph['node_attrs_setting']}
-        self.link_attrs = {e_attr_dict['name']: Attribute.from_dict(e_attr_dict) for e_attr_dict in self.graph['link_attrs_setting']}
+        self.node_attrs = {n_attr_dict['name']: Attribute.from_dict(n_attr_dict) for n_attr_dict in
+                           self.graph['node_attrs_setting']}
+        self.link_attrs = {e_attr_dict['name']: Attribute.from_dict(e_attr_dict) for e_attr_dict in
+                           self.graph['link_attrs_setting']}
 
     def check_attrs_existence(self):
         """Check if all defined attributes exist in the graph."""
@@ -137,7 +141,7 @@ class Network(nx.Graph):
     def num_nodes(self):
         """Get the number of nodes."""
         return self.number_of_nodes()
-    
+
     @cached_property
     def num_links(self):
         """Get the number of links."""
@@ -178,13 +182,13 @@ class Network(nx.Graph):
         Returns:
             list: A list of node attributes.
         """
-        if types is None and names is None: 
+        if types is None and names is None:
             return list(self.node_attrs.values())
-        elif types is not None:  
+        elif types is not None:
             selected_node_attrs = []
             for n_attr in self.node_attrs.values():
                 selected_node_attrs.append(n_attr) if n_attr.type in types else None
-        elif names is not None:  
+        elif names is not None:
             selected_node_attrs = []
             for n_attr in self.node_attrs.values():
                 selected_node_attrs.append(n_attr) if n_attr.name in names else None
@@ -200,13 +204,13 @@ class Network(nx.Graph):
         Returns:
             list: A list of link attributes.
         """
-        if types is None and names is None: 
+        if types is None and names is None:
             return list(self.link_attrs.values())
-        elif types is not None:  
+        elif types is not None:
             selected_link_attrs = []
             for l_attr in self.link_attrs.values():
                 selected_link_attrs.append(l_attr) if l_attr.type in types else None
-        elif names is not None:  
+        elif names is not None:
             selected_link_attrs = []
             for l_attr in self.link_attrs.values():
                 selected_link_attrs.append(l_attr) if l_attr.name in names else None
@@ -377,7 +381,6 @@ class Network(nx.Graph):
         link_sum_attr_benchmarks = self._get_attr_benchmarks(link_attr_types, l_attrs, link_sum_attrs_data)
         return link_sum_attr_benchmarks
 
-
     ### Internal ###
     def __getitem__(self, key):
         """Gets the data of the attribute key."""
@@ -408,6 +411,15 @@ class Network(nx.Graph):
     @classmethod
     def from_gml(cls, fpath):
         gml_net = nx.read_gml(fpath, destringizer=int)
+        net = cls(incoming_graph_data=gml_net)
+        net.check_attrs_existence()
+        return net
+
+    @classmethod
+    def from_gml_2(cls, fpath):
+        gml_net = nx.read_gml(fpath)
+        gml_net = nx.convert_node_labels_to_integers(gml_net)
+
         net = cls(incoming_graph_data=gml_net)
         net.check_attrs_existence()
         return net
