@@ -1,0 +1,16 @@
+1,tcp:localhost:10000,available
+2,tcp:localhost:20000,available
+3,tcp:localhost:30000,available
+4,tcp:localhost:40000,available
+5,tcp:localhost:40001,available
+6,tcp:localhost:40002,available
+7,tcp:localhost:40003,available
+8,tcp:localhost:40004,available
+9,tcp:localhost:40005,available
+10,tcp:localhost:40006,available
+11,tcp:localhost:40007,available
+12,tcp:localhost:40008,available
+13,tcp:localhost:40009,available
+14,tcp:localhost:40010,available
+15,tcp:localhost:40011,available
+16,tcp:localhost:40012,available

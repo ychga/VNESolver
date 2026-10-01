@@ -27,7 +27,7 @@ class DataTester(Tester):
         net.generate_topology(num_nodes=num_nodes)
         net.generate_attrs_data()
         net.to_gml('test.gml')
-        new_net = Network.from_gml('test.gml')
+        new_net = Network.from_gml_2('test.gml')
 
     def test_physical_network(self):
         p_net_setting = self.config.p_net_setting

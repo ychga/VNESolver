@@ -158,7 +158,7 @@ class VirtualNetworkRequestSimulator(object):
         v_net_fnames_list = os.listdir(os.path.join(dataset_dir, 'v_nets'))
         v_net_fnames_list.sort()
         for v_net_fname in v_net_fnames_list:
-            v_net = VirtualNetwork.from_gml(os.path.join(dataset_dir, 'v_nets', v_net_fname))
+            v_net = VirtualNetwork.from_gml_2(os.path.join(dataset_dir, 'v_nets', v_net_fname))
             v_net_simulator.v_nets.append(v_net)
         # load events
         events = read_setting(os.path.join(dataset_dir, v_sim_setting['events_file_name']))

@@ -1,0 +1,655 @@
+{
+  "win": false,
+  "try_count": 1,
+  "trys": [
+    {
+      "chain": [
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 1,
+          "node_type": "Action",
+          "description": "generate_v_net_for_network_knowledge",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 2,
+          "node_type": "Action Input",
+          "description": "{\"intent\":\"Create a network slice with low CPU usage and high bandwidth containing 3 nodes.\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"\", \"response\": \"{'id': '1951e7e0b06'}\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 3,
+          "node_type": "Action",
+          "description": "get_p_net_for_network_knowledge",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 4,
+          "node_type": "Action Input",
+          "description": "{}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"\", \"response\": \"{'gml_content': 'graph [\\\\n  node [\\\\n    id 0\\\\n\\\\tlabel \\\"0\\\"\\\\n    name \\\"SEA\\\"\\\\n    dpid \\\"00:00:00:00:00:00:01:00\\\"\\\\n    cpu 66\\\\n    max_cpu 66\\\\n  ]\\\\n  node [\\\\n    id 1\\\\n\\\\tlabel \\\"1\\\"\\\\n    name \\\"SFO\\\"\\\\n    dpid \\\"00:00:00:00:00:00:02:00\\\"\\\\n    cpu 64\\\\n    max_cpu 64\\\\n  ]\\\\n  node [\\\\n    id 2\\\\n\\\\tlabel \\\"2\\\"\\\\n    name \\\"LAX\\\"\\\\n    dpid \\\"00:00:00:00:00:00:03:00\\\"\\\\n    cpu 81\\\\n    max_cpu 81\\\\n  ]\\\\n  node [\\\\n    id 3\\\\n\\\\tlabel \\\"3\\\"\\\\n    name \\\"ATL\\\"\\\\n    dpid \\\"00:00:00:00:00:00:04:00\\\"\\\\n    cpu 60\\\\n    max_cpu 60\\\\n  ]\\\\n  node [\\\\n    id 4\\\\n\\\\tlabel \\\"4\\\"\\\\n    name \\\"IAD\\\"\\\\n    dpid \\\"00:00:00:00:00:00:05:00\\\"\\\\n    cpu 50\\\\n    max_cpu 50\\\\n  ]\\\\n  node [\\\\n    id 5\\\\n\\\\tlabel \\\"5\\\"\\\\n    name \\\"EWR\\\"\\\\n    dpid \\\"00:00:00:00:00:00:06:00\\\"\\\\n    cpu 78\\\\n    max_cpu 78\\\\n  ]\\\\n  node [\\\\n    id 6\\\\n\\\\tlabel \\\"6\\\"\\\\n    name \\\"SLC\\\"\\\\n    dpid \\\"00:00:00:00:00:00:07:00\\\"\\\\n    cpu 92\\\\n    max_cpu 92\\\\n  ]\\\\n  node [\\\\n    id 7\\\\n\\\\tlabel \\\"7\\\"\\\\n    name \\\"MCI\\\"\\\\n    dpid \\\"00:00:00:00:00:00:08:00\\\"\\\\n    cpu 67\\\\n    max_cpu 67\\\\n  ]\\\\n  node [\\\\n    id 8\\\\n\\\\tlabel \\\"8\\\"\\\\n    name \\\"ORD\\\"\\\\n    dpid \\\"00:00:00:00:00:00:09:00\\\"\\\\n    cpu 88\\\\n    max_cpu 88\\\\n  ]\\\\n  node [\\\\n    id 9\\\\n\\\\tlabel \\\"9\\\"\\\\n    name \\\"CLE\\\"\\\\n    dpid \\\"00:00:00:00:00:00:0a:00\\\"\\\\n    cpu 94\\\\n    max_cpu 94\\\\n  ]\\\\n  node [\\\\n    id 10\\\\n\\\\tlabel \\\"10\\\"\\\\n    name \\\"IAH\\\"\\\\n    dpid \\\"00:00:00:00:00:00:0b:00\\\"\\\\n    cpu 95\\\\n    max_cpu 95\\\\n  ]\\\\n  edge [\\\\n    source 0\\\\n    target 1\\\\n\\\\tport1 5\\\\n\\\\tport2 5\\\\n    bw 74\\\\n    max_bw 74\\\\n    ltc 0.24648561388278828\\\\n  ]\\\\n  edge [\\\\n    source 0\\\\n    target 6\\\\n\\\\tport1 6\\\\n\\\\tport2 5\\\\n    bw 73\\\\n    max_bw 73\\\\n    ltc 0.7558203679633024\\\\n  ]\\\\n  edge [\\\\n    source 1\\\\n    target 2\\\\n\\\\tport1 6\\\\n\\\\tport2 5\\\\n    bw 58\\\\n    max_bw 58\\\\n    ltc 0.11489908844263005\\\\n  ]\\\\n  edge [\\\\n    source 2\\\\n    target 6\\\\n\\\\tport1 6\\\\n\\\\tport2 6\\\\n    bw 90\\\\n    max_bw 90\\\\n    ltc 0.20595145985432425\\\\n  ]\\\\n  edge [\\\\n    source 2\\\\n    target 10\\\\n\\\\tport1 7\\\\n\\\\tport2 5\\\\n    bw 76\\\\n    max_bw 76\\\\n    ltc 0.3026863422358591\\\\n  ]\\\\n  edge [\\\\n    source 6\\\\n    target 7\\\\n\\\\tport1 7\\\\n\\\\tport2 5\\\\n    bw 77\\\\n    max_bw 77\\\\n    ltc 0.20216412976687906\\\\n  ]\\\\n  edge [\\\\n    source 7\\\\n    target 8\\\\n\\\\tport1 7\\\\n\\\\tport2 5\\\\n    bw 63\\\\n    max_bw 63\\\\n    ltc 0.6923165576232445\\\\n  ]\\\\n  edge [\\\\n    source 7\\\\n    target 10\\\\n\\\\tport1 6\\\\n\\\\tport2 6\\\\n    bw 76\\\\n    max_bw 76\\\\n    ltc 0.8023165576232445\\\\n  ]\\\\n  edge [\\\\n    source 3\\\\n    target 8\\\\n\\\\tport1 6\\\\n\\\\tport2 6\\\\n    bw 83\\\\n    max_bw 83\\\\n    ltc 0.43227746374430753\\\\n  ]\\\\n  edge [\\\\n    source 3\\\\n    target 10\\\\n\\\\tport1 5\\\\n\\\\tport2 7\\\\n    bw 85\\\\n    max_bw 85\\\\n    ltc 0.08130408620039427\\\\n  ]\\\\n  edge [\\\\n    source 3\\\\n    target 4\\\\n\\\\tport1 7\\\\n\\\\tport2 5\\\\n    bw 69\\\\n    max_bw 69\\\\n    ltc 0.38130408620039427\\\\n  ]\\\\n  edge [\\\\n    source 4\\\\n    target 9\\\\n\\\\tport1 6\\\\n\\\\tport2 6\\\\n    bw 75\\\\n    max_bw 75\\\\n    ltc 0.58130408620039427\\\\n  ]\\\\n  edge [\\\\n    source 4\\\\n    target 5\\\\n\\\\tport1 7\\\\n\\\\tport2 6\\\\n    bw 58\\\\n    max_bw 58\\\\n    ltc 0.68130408620039427\\\\n  ]\\\\n  edge [\\\\n    source 5\\\\n    target 9\\\\n\\\\tport1 5\\\\n\\\\tport2 7\\\\n    bw 82\\\\n    max_bw 82\\\\n    ltc 0.75130408620039427\\\\n  ]\\\\n  edge [\\\\n    source 8\\\\n    target 9\\\\n\\\\tport1 7\\\\n\\\\tport2 5\\\\n    bw 71\\\\n    max_bw 71\\\\n    ltc 0.11130408620039427\\\\n  ]\\\\n]\\\\n'}\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 5,
+          "node_type": "Action",
+          "description": "get_solution_for_network_knowledge",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 6,
+          "node_type": "Action Input",
+          "description": "{\"v_net_id\":\"1951e7e0b06\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"\", \"response\": \"{'result': 'True', 'place_result': 'True', 'route_result': 'True', 'node_slots': '{0: 7, 1: 10, 2: 8}', 'link_paths': '{(1, 0): [(10, 7)], (2, 0): [(8, 7)], (2, 1): [(8, 3), (3, 10)]}'}\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 7,
+          "node_type": "Action",
+          "description": "create_network_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 8,
+          "node_type": "Action Input",
+          "description": "{}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"\", \"response\": \"{'tenantId': 1, 'isBooted': False, 'networkAddress': 167772160, 'mask': 16, 'controllerUrls': ['tcp:localhost:10000']}\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 9,
+          "node_type": "Action",
+          "description": "create_switch_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 10,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"dpid\":\"00:00:00:00:00:00:08:00\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"\", \"response\": \"{'tenantId': 1, 'dpids': [2048], 'vdpid': '00:a4:23:05:00:00:00:01'}\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 11,
+          "node_type": "Action",
+          "description": "create_switch_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 12,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"dpid\":\"00:00:00:00:00:00:09:00\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"\", \"response\": \"{'tenantId': 1, 'dpids': [2304], 'vdpid': '00:a4:23:05:00:00:00:02'}\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 13,
+          "node_type": "Action",
+          "description": "create_switch_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 14,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"dpid\":\"00:00:00:00:00:00:10:00\"} dpid错误，误以为dpid的命名规律是id+1",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"Message error...\", \"response\": \"{'status': 'error', 'message': {'message': 'CreateOVXSwitch: Invalid DPID : One of the physical dpids that you have provided does not refer to a switch in the physical plane. DPID: 4096', 'code': -32602}}\"}",
+          "observation_code": 11,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 15,
+          "node_type": "Action",
+          "description": "create_switch_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 16,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"dpid\":\"00:00:00:00:00:00:07:00\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"\", \"response\": \"{'tenantId': 1, 'dpids': [1792], 'vdpid': '00:a4:23:05:00:00:00:03'}\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 17,
+          "node_type": "Action",
+          "description": "create_port_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 18,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"dpid\":\"00:00:00:00:00:00:08:00\",\"port\":\"7\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"\", \"response\": \"{'tenantId': 1, 'port': 7, 'dpid': 2048, 'vport': 1, 'vdpid': '00:a4:23:05:00:00:00:01'}\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 19,
+          "node_type": "Action",
+          "description": "create_port_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 20,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"dpid\":\"00:00:00:00:00:00:09:00\",\"port\":\"7\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"\", \"response\": \"{'tenantId': 1, 'port': 7, 'dpid': 2304, 'vport': 1, 'vdpid': '00:a4:23:05:00:00:00:02'}\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 21,
+          "node_type": "Action",
+          "description": "create_port_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 22,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"dpid\":\"00:00:00:00:00:00:07:00\",\"port\":\"5\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"\", \"response\": \"{'tenantId': 1, 'port': 5, 'dpid': 1792, 'vport': 1, 'vdpid': '00:a4:23:05:00:00:00:03'}\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 23,
+          "node_type": "Action",
+          "description": "connect_link_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 24,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"src_vdpid\":\"00:a4:23:05:00:00:00:02\",\"src_vport\":\"1\",\"dst_vdpid\":\"00:a4:23:05:00:00:00:01\",\"dst_vport\":\"1\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"Function executing from data.toolenv.tools.Intent_Based_Network_Slice.openvirtex.api import connect_link error...\\nconnect_link() got an unexpected keyword argument 'src_vdpid'\", \"response\": \"\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 25,
+          "node_type": "Action",
+          "description": "connect_link_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 26,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"src_vdpid\":\"00:a4:23:05:00:00:00:01\",\"src_vport\":\"1\",\"dst_vdpid\":\"00:a4:23:05:00:00:00:02\",\"dst_vport\":\"1\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"Function executing from data.toolenv.tools.Intent_Based_Network_Slice.openvirtex.api import connect_link error...\\nconnect_link() got an unexpected keyword argument 'src_vdpid'\", \"response\": \"\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 27,
+          "node_type": "Action",
+          "description": "connect_link_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 28,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"src_vdpid\":\"00:a4:23:05:00:00:00:01\",\"src_vport\":\"1\",\"dst_vdpid\":\"00:a4:23:05:00:00:00:03\",\"dst_vport\":\"1\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"Function executing from data.toolenv.tools.Intent_Based_Network_Slice.openvirtex.api import connect_link error...\\nconnect_link() got an unexpected keyword argument 'src_vdpid'\", \"response\": \"\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 29,
+          "node_type": "Action",
+          "description": "connect_link_for_openvirtex",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 30,
+          "node_type": "Action Input",
+          "description": "{\"tenant\":\"1\",\"src_vdpid\":\"00:a4:23:05:00:00:00:02\",\"src_vport\":\"1\",\"dst_vdpid\":\"00:a4:23:05:00:00:00:03\",\"dst_vport\":\"1\"}",
+          "Elo": 1000.0,
+          "observation": "{\"error\": \"Function executing from data.toolenv.tools.Intent_Based_Network_Slice.openvirtex.api import connect_link error...\\nconnect_link() got an unexpected keyword argument 'src_vdpid'\", \"response\": \"\"}",
+          "observation_code": 0,
+          "child_count": 1,
+          "expand_num": 0,
+          "io_state": {}
+        },
+        {
+          "is_terminal": false,
+          "pruned": false,
+          "finished": false,
+          "depth": 31,
+          "node_type": "Action",
+          "description": "Finish",
+          "Elo": 1000.0,
+          "child_count": 1,
+          "expand_num": 0
+        },
+        {
+          "is_terminal": false,
+          "pruned": true,
+          "finished": false,
+          "depth": 32,
+          "node_type": "Action Input",
+          "description": "{\"return_type\":\"give_up_and_restart\"}",
+          "Elo": 1000.0,
+          "observation": "{\"response\":\"chose to give up and restart\"}",
+          "observation_code": 4,
+          "child_count": 0,
+          "expand_num": 0,
+          "io_state": {}
+        }
+      ],
+      "win": false
+    }
+  ],
+  "compare_candidates": [],
+  "forward_args": {
+    "single_chain_max_step": 50,
+    "pass_at": 1,
+    "answer": 1
+  },
+  "answer_generation": {
+    "valid_data": false,
+    "final_answer": "",
+    "function": [
+      {
+        "name": "generate_v_net_for_network_knowledge",
+        "description": "This is the subfunction for tool \"network_knowledge\", you can use this tool.The description of this function is: \"Generate a virtual network GML description based on user intent.\"",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "intent": {
+              "type": "string",
+              "description": "User intent, usually in natural language"
+            }
+          },
+          "required": [
+            "intent"
+          ],
+          "optional": []
+        }
+      },
+      {
+        "name": "get_p_net_for_network_knowledge",
+        "description": "This is the subfunction for tool \"network_knowledge\", you can use this tool.The description of this function is: \"Retrieve the Physical Network GML file, which includes nodes (id, name, dpid, etc.) and links (source, target, port1, port2, etc.). This must be called before attempting to deploy a v_net, as the physical network state is required.\"",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "optional": []
+        }
+      },
+      {
+        "name": "get_solution_for_network_knowledge",
+        "description": "This is the subfunction for tool \"network_knowledge\", you can use this tool.The description of this function is: \"Retrieve a deployment solution for a virtual network. **Important:** The response includes:\n\n   `node_slots` maps virtual node IDs(not dpid) **(key)** to physical node IDs(not dpid) **(value)**. \\\n    `link_paths` maps virtual links to **physical link sequences**. Always follow this mapping exactly. \n1. Before using node_slots, call 'get_p_net' to map physical node IDs to their corresponding dpid and name.\n2. If any of 'result', 'place_result', or 'route_result' is 'False', deployment should be terminated, and the failure reason must be returned to the user.\"",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "v_net_id": {
+              "type": "string",
+              "description": "The ID of the virtual network."
+            }
+          },
+          "required": [
+            "v_net_id"
+          ],
+          "optional": []
+        }
+      },
+      {
+        "name": "create_network_for_openvirtex",
+        "description": "This is the subfunction for tool \"openvirtex\", you can use this tool.The description of this function is: \"Create a new virtual network (OVXNetwork). Return {TENANT, CTRLURLS, NETADD, NETMASK, IS_BOOTED}, where TENANT is id of the virtual network\"",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "optional": []
+        }
+      },
+      {
+        "name": "create_switch_for_openvirtex",
+        "description": "This is the subfunction for tool \"openvirtex\", you can use this tool.The description of this function is: \"Create a new OVXSwitch. Return {TENANT, DPIDS, VDPID}\\n\\n**How to use:**\\n\\\n    1. Obtain `node_slots` from `get_solution`.\\n\\\n    2. Use `get_p_net` to find the corresponding DPID of the physical node.\\n\\\n    3. Ensure the DPID exists in the physical network before proceeding. If a virtual node already has a ovxswitch, do not create a new one. VDPID is the v_node's dpid(not v_node's id). You must remember the vdpid, so a complete node mapping is: {vdpid : v_node_id : p_node_id: dpid}.\"",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tenant": {
+              "type": "string",
+              "description": "tenantId. The ID of a virtual network"
+            },
+            "dpid": {
+              "type": "string",
+              "description": "\"The dpid of a p_node."
+            }
+          },
+          "required": [
+            "tenant",
+            "dpid"
+          ],
+          "optional": []
+        }
+      },
+      {
+        "name": "create_port_for_openvirtex",
+        "description": "This is the subfunction for tool \"openvirtex\", you can use this tool.The description of this function is: \"Add a new port to an OVXSwitch. Return {DPID, PORT, VPORT, VDPID, TENANT}, VPORT is the virtual port id corresponding to the physical port being added\"",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tenant": {
+              "type": "string",
+              "description": "tenantId. The id of a virtual network"
+            },
+            "dpid": {
+              "type": "string",
+              "description": "The dpid of a p_node."
+            },
+            "port": {
+              "type": "string",
+              "description": "port. The port number of a physical switch port. You need to read the physical network descriptor's link information first to know the dpid of a physical switch"
+            }
+          },
+          "required": [
+            "tenant",
+            "dpid",
+            "port"
+          ],
+          "optional": []
+        }
+      },
+      {
+        "name": "connect_link_for_openvirtex",
+        "description": "This is the subfunction for tool \"openvirtex\", you can use this tool.The description of this function is: \"Add a virtual link to an OVXNetwork. Return {LINK, PRIORITY, ALGORITHM, BACKUPS, PATH, TENANT}\"",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tenant": {
+              "type": "string",
+              "description": "tenantId. The ID of a virtual network"
+            },
+            "src_vdpid": {
+              "type": "string",
+              "description": "srcDpid. The VDPID of the source OVXSwitch"
+            },
+            "src_vport": {
+              "type": "string",
+              "description": "srcPort. The vport on the source OVXSwitch"
+            },
+            "dst_vdpid": {
+              "type": "string",
+              "description": "dstDpid. The VDPID of the destination OVXSwitch"
+            },
+            "dst_vport": {
+              "type": "string",
+              "description": "dstPort. The vport on the destination OVXSwitch"
+            },
+            "algorithm": {
+              "type": "string",
+              "description": "Method for setting routes in a OVXBigSwitch: \"manual\" or \"spf\"",
+              "example_value": "manual"
+            },
+            "backups": {
+              "type": "string",
+              "description": "backup_num. Number of backup paths associated with a virtual link or route",
+              "example_value": 1
+            }
+          },
+          "required": [
+            "tenant",
+            "src_vdpid",
+            "src_vport",
+            "dst_vdpid",
+            "dst_vport"
+          ],
+          "optional": [
+            "algorithm",
+            "backups"
+          ]
+        }
+      },
+      {
+        "name": "set_link_path_for_openvirtex",
+        "description": "This is the subfunction for tool \"openvirtex\", you can use this tool.The description of this function is: \"Add a physical network path to a virtual link (OVXLink). Return {LINK, PRIORITY, ALGORITHM, BACKUPS, PATH, TENANT}. \"Add a virtual link using `link_paths` from `get_solution`. \\\n    Each virtual link must follow its mapped physical path strictly.\"\"",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tenant": {
+              "type": "string",
+              "description": "tenantId. The ID of a virtual network"
+            },
+            "link": {
+              "type": "string",
+              "description": "linkId. OVX-generated UUID of a virtual link"
+            },
+            "path": {
+              "type": "string",
+              "description": "The physical path taken by a virtual link or route. \\n\\n**How to generate:**\\n\\\n    1. Extract `link_paths` from `get_solution`'s response.\\n\\\n    2. Convert `{(v_id_1,v__id_2): [(p_id_1,p_id_2)]}` into `\\\"dpid_1/port_1-dipd_2/port_2\\\"` format.\\n\\\n    3. Ensure all `SRC_DPID/SRC_PORT-DST_DPID/DST_PORT` exist in the physical network.\""
+            },
+            "priority": {
+              "type": "string",
+              "description": "The priority (1-255) of a path associated with a link or route. Higher value is higher priority.",
+              "example_value": 1
+            }
+          },
+          "required": [
+            "tenant",
+            "link",
+            "path"
+          ],
+          "optional": [
+            "priority"
+          ]
+        }
+      },
+      {
+        "name": "start_network_for_openvirtex",
+        "description": "This is the subfunction for tool \"openvirtex\", you can use this tool.The description of this function is: \"Initialize (boot) an OVXNetwork. Return {TENANT, CTRLURLS, NETADD, NETMASK, IS_BOOTED}, where TENANT is id of the virtual network\"",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tenant": {
+              "type": "string",
+              "description": "tenantId. The ID of a virtual network"
+            }
+          },
+          "required": [
+            "tenant"
+          ],
+          "optional": []
+        }
+      },
+      {
+        "name": "Finish",
+        "description": "If you believe that you have obtained a result that can answer the task, please call this function to provide the final answer. Alternatively, if you recognize that you are unable to proceed with the task in the current state, call this function to restart. Remember: you must ALWAYS call this function at the end of your attempt, and the only part that will be shown to the user is the final answer, so it should contain sufficient information.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "return_type": {
+              "type": "string",
+              "enum": [
+                "give_answer",
+                "give_up_and_restart"
+              ]
+            },
+            "final_answer": {
+              "type": "string",
+              "description": "The final answer you want to give the user. You should have this field if \"return_type\"==\"give_answer\""
+            }
+          },
+          "required": [
+            "return_type"
+          ]
+        }
+      }
+    ],
+    "query_count": 16,
+    "total_tokens": 72144,
+    "train_messages": [],
+    "chain": [],
+    "query": "I want a slice with low cpu and high bw, it should contain 3 nodes"
+  }
+}

@@ -1,0 +1,5 @@
+slice_id,v_net_id,controller_ip,is_booted
+19575d93ec7,2,tcp:localhost:40009,True
+19575d9adb7,1,tcp:localhost:10000,True
+195761e849a,3,tcp:localhost:20000,True
+195762035cf,4,tcp:localhost:30000,True

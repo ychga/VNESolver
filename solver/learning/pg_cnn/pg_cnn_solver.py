@@ -46,11 +46,13 @@ def obs_as_tensor(obs, device):
         obs_batch = obs
         """Preprocess the observation to adapte to batch mode."""
         observation = torch.FloatTensor(np.array(obs_batch)).to(device)
+        # print(f'observation is {observation}')
         return observation
     # batch
     else:
         observation = obs
         observation = torch.FloatTensor(observation).unsqueeze(dim=0).to(device)
+        # print(f'observation is {observation}')
         return observation
 
 

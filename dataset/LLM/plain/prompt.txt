@@ -1,0 +1,204 @@
+---
+
+### **Reference**
+#### IntentType, Action and Parameters
+
+```python
+`IntentType = {"DeploymentIntent","ModificationIntent"}`
+`Action = {"DeploymentIntent": {"deploy_slice"},`
+          `"ModificationIntent": {"remove_slice"}`
+```
+
+DeploymentIntent: user wants to create a network slice
+ModificationIntent: user wants to modify a network slice
+
+deploy_slice(gml_file): it needs a gml file which describes user's desire for a network slice to create a slice
+remove_slice(slice_id): it needs the slice_id to delete a specific slice
+
+#### GML Format
+
+The GML format consists of the following elements:
+
+- `description`: A brief text describing the network slice.
+- `num_nodes`: The total number of nodes in the graph.
+- `node`: Represents a node in the network, with attributes:
+  - `id`: A unique identifier for the node.
+  - `label`: A string label for the node, same as `id`.
+  - `cpu`: The computational resources allocated to the node, measured in units.
+- `edge`: Represents a connection between two nodes, with attributes:
+  - `source`: The source node ID.
+  - `target`: The target node ID.
+  - `bw`: The bandwidth resources allocated to the edge, measured in units.
+
+#### Example GML
+
+The following GML defines a virtual network slice with 4 nodes and 4 links:
+graph [
+  description "this is a slice"
+  num_nodes 4
+  node [
+    id 0
+    label "0"
+    cpu 10
+  ]
+  node [
+    id 1
+    label "1"
+    cpu 19
+  ]
+  node [
+    id 2
+    label "2"
+    cpu 1
+  ]
+  node [
+    id 3
+    label "3"
+    cpu 50
+  ]
+  edge [
+    source 0
+    target 1
+    bw 49
+  ]
+  edge [
+    source 1
+    target 2
+    bw 44
+  ]
+  edge [
+    source 1
+    target 3
+    bw 19
+  ]
+  edge [
+    source 2
+    target 3
+    bw 50
+  ]
+]
+
+#### Resource Constraints and Considerations
+
+**Resource Limits:**
+The total computational power (cpu) for nodes and bandwidth (bw) for edges is limited to a range of [50, 100] units.
+Nodes with high computational power should be allocated more CPU units, while edges with high bandwidth should be allocated more bandwidth units.
+
+**Defining "Resources Level":**
+A node with cpu ≥ 25 units can be considered "high-computation."
+A node with cpu ≥ 10 && cpu < 25 units can be considered "moderate-computation."
+A node with cpu < 10 units can be considered "low-computation."
+A link with bw ≥ 25 units can be considered "high-bandwidth."
+A link with bw ≥ 10 && bw < 25 units can be considered "moderate-bandwidth."
+A link with bw < 10 units can be considered "low-bandwidth."
+The bandwidth resource level of the entire slice depends on the link with the lowest bandwidth, so usually the links have the same bandwidth.
+
+**Inferring Topology and Resources:**
+Analyze the user's intent for possible topological requirements (e.g., linear, star, mesh).
+Determine the number of nodes and links based on the user's high-level description.
+Distribute resources judiciously to balance computational and bandwidth requirements across the slice.
+The entire network is a connected graph, so there should be no isolated nodes
+If the topology of the slice is difficult to infer, or the user does not specify the topology, you can use the default topology, a ring topology with three nodes and three edges.
+
+---
+
+### **Historical Examples**
+#### Example 1:
+
+User Intent:
+"I need a high-performance network slice with 3 main nodes connected in a star topology. The central node should handle most of the computation, while the links require moderate bandwidth."
+
+Output:
+
+```python
+[
+(
+    "DeploymentIntent",
+    "deploy_slice",
+    {
+        gml:"graph [
+              description "high-performance star network"
+              num_nodes 3
+              node [
+                id 0
+                label "0"
+                cpu 45
+              ]
+              node [
+                id 1
+                label "1"
+                cpu 25
+              ]
+              node [
+                id 2
+                label "2"
+                cpu 25
+              ]
+              edge [
+                source 0
+                target 1
+                bw 10
+              ]
+              edge [
+                source 0
+                target 2
+                bw 10
+              ]
+            ]",
+    },
+)
+]
+```
+#### Explanation for Example 1:
+
+- The user wants to create such a network slice, so it is DeploymentIntent and we should do the "deploy_slice" to realize his intent, for this action, we should write a gml file.
+- The user requested a star topology with a high-performance central node
+- CPU resources were allocated to the central node (id=0, cpu=45 units) and evenly distributed among the leaf nodes (25 units each), aligning with the user's desire of "high-performance."
+- Links were assigned moderate bandwidth (10 units each), aligning with the user’s description of "moderate bandwidth."
+
+
+
+#### Example 2:
+
+User Intent:
+"delete this slice: qa21ew11"
+
+Output:
+
+```python
+[
+(
+    "ModificationIntent",
+    "remove_slice",
+    {
+        slice_id:"qa21ew11",
+    },
+)
+]
+```
+
+#### Explanation for Example 2:
+
+- The user wants to delete the slice qa21ew11, so it is DeploymentIntent and we should do the "remove_slice" to realize his intent, for this action, we need the slice's id.
+- User did give us the slice' id, it is qa21ew11.
+
+---
+
+### **Task Requirements**
+1. Parse the `userIntent` to determine:
+   - Intent type (`intentType`).
+   - Appropriate action (`Action`) to execute.
+   - Necessary parameters (`Params`) for the action.
+2. Ensure the output matches the format: a list of tuples `(intentType, Action, Params)`.
+3. Only defined user intentType and Action can be used
+4. If the action involves GML generation, ensure the output adheres to GML format.
+5. Handle vague or incomplete intents by making reasonable assumptions based on historical examples and provided constraints.
+6. Ensure that the generated gml file meets the given constraints and reflects the user’s intent.
+
+---
+
+### **Given User Intent**
+I want a slice with low cpu and high bw, it should contain 5 nodes
+
+### **Your Output**  
+Please generate the list of tuples based on the intent.
